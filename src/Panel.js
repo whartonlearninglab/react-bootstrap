@@ -14,10 +14,13 @@ import Footer from './PanelFooter';
 import Toggle from './PanelToggle';
 import Collapse from './PanelCollapse';
 
+const defaultGetId = (id, type) => id ? `${id}--${type}` : null;
+
 const propTypes = {
   onToggle: React.PropTypes.func,
   expanded: React.PropTypes.bool,
   eventKey: React.PropTypes.any,
+  id: React.PropTypes.string,
 
   collapsible: React.PropTypes.bool,
 };
@@ -45,14 +48,14 @@ class Panel extends React.Component {
   }
 
   getChildContext() {
-    const { expanded, eventKey } = this.props;
-    let { getId } = this.context.$bs_panelGroup || {};
-    let getIds = null;
+    const { expanded, eventKey, id } = this.props;
+    const { getId = defaultGetId } = this.context.$bs_panelGroup || {};
 
-    if (getId) {
+    let getIds = null;
+    if (getId || id) {
       getIds = () => ({
-        headingId: getId(eventKey, 'HEADING'),
-        collapseId: getId(eventKey, 'COLLAPSE')
+        headingId: getId(eventKey || id, 'HEADING'),
+        collapseId: getId(eventKey || id, 'COLLAPSE')
       });
     }
 
@@ -132,7 +135,7 @@ class Panel extends React.Component {
         case 'footer':
           addChild(footers, child);
           break;
-        case 'body':
+        case 'panel-body':
           maybeWrapPanelBody();
           addChild(body, child);
           break;
@@ -152,7 +155,7 @@ class Panel extends React.Component {
     maybeWrapPanelBody();
 
     if (this.props.collapsible) {
-      body = <Collapse>{body}</Collapse>;
+      body = <Collapse key="collapse">{body}</Collapse>;
     }
 
     return [...headers, ...body, ...footers];
