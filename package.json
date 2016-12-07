@@ -4,7 +4,7 @@
   "description": "Bootstrap 3 components built with React",
   "repository": {
     "type": "git",
-    "url": "react-bootstrap/react-bootstrap"
+    "url": "whartonlearninglab/react-bootstrap"
   },
   "homepage": "https://react-bootstrap.github.io/",
   "scripts": {
@@ -130,7 +130,7 @@
     "warning": "^3.0.0"
   },
   "release-script": {
-    "bowerRepo": "git@github.com:react-bootstrap/react-bootstrap-bower.git",
-    "docsRepo": "git@github.com:react-bootstrap/react-bootstrap.github.io.git"
+    "bowerRepo": "git@github.com:whartonlearninglab/react-bootstrap-bower.git",
+    "docsRepo": "git@github.com:whartonlearninglab/react-bootstrap.github.io.git"
   }
 }
