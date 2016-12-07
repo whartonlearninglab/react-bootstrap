@@ -24,6 +24,7 @@ var propTypes = {
   eventKey: React.PropTypes.any,
   headerRole: React.PropTypes.string,
   panelRole: React.PropTypes.string,
+  anchorClass: React.PropTypes.string,
 
   // From Collapse.
   onEnter: React.PropTypes.func,
@@ -70,7 +71,7 @@ var Panel = function (_React$Component) {
     }
   };
 
-  Panel.prototype.renderHeader = function renderHeader(collapsible, header, id, role, expanded, bsProps) {
+  Panel.prototype.renderHeader = function renderHeader(collapsible, header, id, role, expanded, bsProps, anchorClass) {
     var titleClassName = prefix(bsProps, 'title');
 
     if (!collapsible) {
@@ -87,17 +88,21 @@ var Panel = function (_React$Component) {
       return React.createElement(
         'h4',
         { role: 'presentation', className: titleClassName },
-        this.renderAnchor(header, id, role, expanded)
+        this.renderAnchor(header, id, role, expanded, anchorClass)
       );
     }
 
     return cloneElement(header, {
       className: classNames(header.props.className, titleClassName),
-      children: this.renderAnchor(header.props.children, id, role, expanded)
+      children: this.renderAnchor(header.props.children, id, role, expanded, anchorClass)
     });
   };
 
-  Panel.prototype.renderAnchor = function renderAnchor(header, id, role, expanded) {
+  Panel.prototype.renderAnchor = function renderAnchor(header, id, role, expanded, anchorClass) {
+    var className = expanded ? '' : 'collapsed';
+    if (anchorClass) {
+      className = className + ' ' + anchorClass;
+    }
     return React.createElement(
       'a',
       {
@@ -107,7 +112,7 @@ var Panel = function (_React$Component) {
         'aria-controls': id,
         'aria-expanded': expanded,
         'aria-selected': expanded,
-        className: expanded ? null : 'collapsed'
+        className: className
       },
       header
     );
@@ -178,6 +183,7 @@ var Panel = function (_React$Component) {
         footer = _props.footer,
         propsExpanded = _props.expanded,
         headerRole = _props.headerRole,
+        anchorClass = _props.anchorClass,
         panelRole = _props.panelRole,
         className = _props.className,
         children = _props.children,
@@ -187,7 +193,7 @@ var Panel = function (_React$Component) {
         onExit = _props.onExit,
         onExiting = _props.onExiting,
         onExited = _props.onExited,
-        props = _objectWithoutProperties(_props, ['collapsible', 'header', 'id', 'footer', 'expanded', 'headerRole', 'panelRole', 'className', 'children', 'onEnter', 'onEntering', 'onEntered', 'onExit', 'onExiting', 'onExited']);
+        props = _objectWithoutProperties(_props, ['collapsible', 'header', 'id', 'footer', 'expanded', 'headerRole', 'anchorClass', 'panelRole', 'className', 'children', 'onEnter', 'onEntering', 'onEntered', 'onExit', 'onExiting', 'onExited']);
 
     var _splitBsPropsAndOmit = splitBsPropsAndOmit(props, ['defaultExpanded', 'eventKey', 'onSelect']),
         bsProps = _splitBsPropsAndOmit[0],
@@ -206,7 +212,7 @@ var Panel = function (_React$Component) {
       header && React.createElement(
         'div',
         { className: prefix(bsProps, 'heading') },
-        this.renderHeader(collapsible, header, id, headerRole, expanded, bsProps)
+        this.renderHeader(collapsible, header, id, headerRole, expanded, bsProps, anchorClass)
       ),
       collapsible ? this.renderCollapsibleBody(id, expanded, panelRole, children, bsProps, { onEnter: onEnter, onEntering: onEntering, onEntered: onEntered, onExit: onExit, onExiting: onExiting, onExited: onExited }) : this.renderBody(children, bsProps),
       footer && React.createElement(
