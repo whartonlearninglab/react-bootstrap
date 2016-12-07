@@ -21,6 +21,7 @@ const propTypes = {
   eventKey: React.PropTypes.any,
   headerRole: React.PropTypes.string,
   panelRole: React.PropTypes.string,
+  anchorClass: React.PropTypes.string,
 
   // From Collapse.
   onEnter: React.PropTypes.func,
@@ -62,7 +63,7 @@ class Panel extends React.Component {
     }
   }
 
-  renderHeader(collapsible, header, id, role, expanded, bsProps) {
+  renderHeader(collapsible, header, id, role, expanded, bsProps, anchorClass) {
     const titleClassName = prefix(bsProps, 'title');
 
     if (!collapsible) {
@@ -78,18 +79,22 @@ class Panel extends React.Component {
     if (!React.isValidElement(header)) {
       return (
         <h4 role="presentation" className={titleClassName}>
-          {this.renderAnchor(header, id, role, expanded)}
+          {this.renderAnchor(header, id, role, expanded, anchorClass)}
         </h4>
       );
     }
 
     return cloneElement(header, {
       className: classNames(header.props.className, titleClassName),
-      children: this.renderAnchor(header.props.children, id, role, expanded),
+      children: this.renderAnchor(header.props.children, id, role, expanded, anchorClass),
     });
   }
 
-  renderAnchor(header, id, role, expanded) {
+  renderAnchor(header, id, role, expanded, anchorClass) {
+    let className = expanded ? '' : 'collapsed';
+    if (anchorClass) {
+      className = className + ' ' + anchorClass;
+    }
     return (
       <a
         role={role}
@@ -98,7 +103,7 @@ class Panel extends React.Component {
         aria-controls={id}
         aria-expanded={expanded}
         aria-selected={expanded}
-        className={expanded ? null : 'collapsed' }
+        className={className}
       >
         {header}
       </a>
@@ -170,6 +175,7 @@ class Panel extends React.Component {
       footer,
       expanded: propsExpanded,
       headerRole,
+      anchorClass,
       panelRole,
       className,
       children,
@@ -200,7 +206,7 @@ class Panel extends React.Component {
         {header && (
           <div className={prefix(bsProps, 'heading')}>
             {this.renderHeader(
-              collapsible, header, id, headerRole, expanded, bsProps
+              collapsible, header, id, headerRole, expanded, bsProps, anchorClass
             )}
           </div>
         )}

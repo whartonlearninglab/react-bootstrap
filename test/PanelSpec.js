@@ -66,6 +66,22 @@ describe('<Panel>', () => {
     assert.equal(header.firstChild.nodeName, 'H3');
     assert.ok(header.firstChild.className.match(/\bpanel-title\b/));
     assert.equal(header.firstChild.firstChild.nodeName, 'A');
+    assert.ok(header.firstChild.firstChild.className.match(/\bcollapsed\b/));
+    assert.equal(header.firstChild.firstChild.textContent, 'Heading');
+  });
+
+  it('Should have custom component header with anchor with a custom class', () => {
+    const instance = ReactTestUtils.renderIntoDocument(
+      <Panel header={<h3>Heading</h3>} anchorClass="toggle" collapsible >
+        Panel content
+      </Panel>
+    );
+    const header = ReactTestUtils.findRenderedDOMComponentWithClass(instance, 'panel-heading');
+    assert.equal(header.firstChild.nodeName, 'H3');
+    assert.ok(header.firstChild.className.match(/\bpanel-title\b/));
+    assert.equal(header.firstChild.firstChild.nodeName, 'A');
+    assert.ok(header.firstChild.firstChild.className.match(/\bcollapsed toggle\b/));
+
     assert.equal(header.firstChild.firstChild.textContent, 'Heading');
   });
 
